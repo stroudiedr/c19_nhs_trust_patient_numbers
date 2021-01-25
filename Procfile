@@ -1,1 +1,1 @@
-web: sh setup.sh && streamlit run hospital_single.py
+web: sh setup.sh && streamlit run hospitals_single.py
