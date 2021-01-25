@@ -115,5 +115,5 @@ NHS Trust
 st.sidebar.text("""
 For further information see:
 """)
-st.sidebar.markdown("[Github](https://coronavirus.data.gov.uk/)")
+st.sidebar.markdown("[Github](https://github.com/stroudiedr/c19_nhs_trust_patient_numbers.git)")
 st.sidebar.markdown("[Twitter](https://twitter.com/StroudieDr)")
