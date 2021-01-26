@@ -34,7 +34,7 @@ st.write(df_gp," ")
 hospitals = df["NHS_Trust"].sort_values().unique()
 sel_hosp = st.selectbox("NHS Trust Name",hospitals)
 max_date = df.loc[df["NHS_Trust"]==sel_hosp]["Date"].max()
-max_date = max_date.strftime("%Y-%m-%d")
+#max_date = max_date.strftime("%Y-%m-%d")
 
 #Rolling average
 rolling = st.radio("How many days to average the data over?",("1 day","3 days","5 days","7 days"))
