@@ -2,19 +2,58 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import streamlit as st
 
+# Sidebar information
+st.sidebar.title("Welcome to this app ")
+st.sidebar.text("""
+This simple app displays NHS patient 
+numbers that are associated with 
+COVID-19 infection and hospital 
+admission.
+
+Graphs show new daily admissions,
+number of hospital inpatients,
+number of patients on mechanical
+ventilation. Numbers are displayed
+as a rolling 5 day average.
+""")
+
+st.sidebar.header("Data source")
+st.sidebar.text("""
+Data is downloaded from Gov.uk.
+It is the most uptodate information
+on COVID-19 infection that is 
+publically available.
+""")
+st.sidebar.markdown("[https://coronavirus.data.gov.uk/](https://coronavirus.data.gov.uk/)")
+
+
+st.sidebar.header("About")
+st.sidebar.text("""
+App made using Python 3.8 & Streamlit
+by Dr David Freeman
+Worcestershire Acute Hospitals
+NHS Trust
+""")
+
+st.sidebar.text("""
+For further information see:
+""")
+st.sidebar.markdown("[Github](https://github.com/stroudiedr/c19_nhs_trust_patient_numbers.git)")
+st.sidebar.markdown("[Twitter](https://twitter.com/StroudieDr)")
+
 st.title("COVID-19 NHS Trust Patient Numbers")
 
 #Dataframe
 @st.cache
 def load_data():
-		url = "https://api.coronavirus.data.gov.uk/v2/data?areaType=nhsTrust&metric=hospitalCases&metric=newAdmissions&metric=covidOccupiedMVBeds&format=csv"
+		url = "https://api.coronavirus.data.gov.uk/v2/data?areaType=nhsTrust&metric=covidOccupiedMVBeds&metric=hospitalCases&metric=newAdmissions&format=csv"
 
 		from urllib.request import urlretrieve
 		urlretrieve(url,"covid-19.csv")
 
 		df = pd.read_csv("covid-19.csv",parse_dates=["date"])
 		df = df[df["areaCode"].str.len()== 3]
-		df.columns = ["Date","Type","Code","NHS_Trust","Hosp_Cases","New_Adms","C19_Mech_Vent"]
+		df.columns = ["Code","NHS_Trust","Type","Date","C19_Mech_Vent","Hosp_Cases","New_Adms"]
 		df_gp = df.groupby("NHS_Trust")[["Hosp_Cases","New_Adms","C19_Mech_Vent"]].max()
 		df_gp = df_gp[df_gp["C19_Mech_Vent"]>0]
 		Trust_MV = df_gp.index.tolist()
@@ -79,41 +118,3 @@ st.pyplot(fig)
 st.text(f"Latest date of the downloaded data for this NHS Trust is {max_date}")
 
 
-# Sidebar information
-st.sidebar.title("Welcome to this app ")
-st.sidebar.text("""
-This simple app displays NHS patient 
-numbers that are associated with 
-COVID-19 infection and hospital 
-admission.
-
-Graphs show new daily admissions,
-number of hospital inpatients,
-number of patients on mechanical
-ventilation. Numbers are displayed
-as a rolling 5 day average.
-""")
-
-st.sidebar.header("Data source")
-st.sidebar.text("""
-Data is downloaded from Gov.uk.
-It is the most uptodate information
-on COVID-19 infection that is 
-publically available.
-""")
-st.sidebar.markdown("[https://coronavirus.data.gov.uk/](https://coronavirus.data.gov.uk/)")
-
-
-st.sidebar.header("About")
-st.sidebar.text("""
-App made using Python 3.8 & Streamlit
-by Dr David Freeman
-Worcestershire Acute Hospitals
-NHS Trust
-""")
-
-st.sidebar.text("""
-For further information see:
-""")
-st.sidebar.markdown("[Github](https://github.com/stroudiedr/c19_nhs_trust_patient_numbers.git)")
-st.sidebar.markdown("[Twitter](https://twitter.com/StroudieDr)")
